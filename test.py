@@ -3,8 +3,6 @@ import pymysql
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from apscheduler.schedulers.blocking import BlockingScheduler
-# 东方财富7x24小时
 from selenium.webdriver import Chrome, ChromeOptions
 # run函数
 # def run():
@@ -13,11 +11,12 @@ from selenium.webdriver import Chrome, ChromeOptions
 #     timer.start(index)  # 启动线程
 #     print("爬虫再次启动")
 # //连接数据库
-conn = pymysql.connect(host='',  # host属性
-                       port=,  # 端口号
-                       user='',  # 用户名
-                       password='',  # 此处填登录数据库的密码
-                       db='study' , # 数据库名
+from selenium.webdriver.common.by import By
+conn = pymysql.connect(host='localhost',  # host属性
+                       port=3306,  # 端口号
+                       user='root',  # 用户名
+                       password='123456Aa',  # 此处填登录数据库的密码
+                       db='rollbacksystem' , # 数据库名
                        charset='utf8'
                        )
 
@@ -53,7 +52,7 @@ def index():
             # 获取一个光标
             cursor = conn.cursor()
             # 插入数据,insert into 表（列名，列名，列名）values(值，值，值)这个值主要就是对应的你获取到的值
-            sql = 'insert into studyt(newtime,nsources,ncontent) values(%s,%s,%s);'
+            sql = 'insert into quantizationsystem_new_mag(new_time,new_sources,new_content) values(%s,%s,%s);'
             # 对获取到的数据进行排序如果有重复的则进行筛除
             data_list=[d,line,newtext]
 
@@ -72,6 +71,8 @@ def index():
             time.sleep(5)
         else:
             driver.quit()
+            # 关闭数据库
+            conn.close()
 # 翻页功能，selenium模拟键盘自动翻页
 for j in range(1):
         index()
@@ -85,9 +86,6 @@ for j in range(1):
 
 if __name__ == "__main__":
         index()
-        # sched = BlockingScheduler()
-        # sched.add_job(index, 'interval', seconds=30)
-        # sched.start()
 
 
 
